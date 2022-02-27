@@ -108,7 +108,7 @@ export default {
           this.password,this.repeat, this.name, this.surname).then((response) => {
             this.user = response.data;
             this.$store.commit("doLogIn", this.user);
-            this.$router.push("/verify")
+            this.$router.push("/")
       }).catch(() => {
         this.errorMessage = "Настана некаква грешка, обидете се повторно!";
       })

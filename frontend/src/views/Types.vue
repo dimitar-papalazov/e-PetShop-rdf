@@ -127,7 +127,6 @@ export default {
     },
     loadTypes() {
       TypeService.allTypes().then(response => {
-        console.log("types", response.data);
         this.types = response.data.map((v, i) => {return {
           name: v,
           id: i
