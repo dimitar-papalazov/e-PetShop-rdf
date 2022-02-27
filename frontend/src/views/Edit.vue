@@ -47,7 +47,7 @@
                 class="custom-select form-control"
               >
                 <option v-for="type in types" :key="type.id" :value="type.id">
-                  {{ type.name }}
+                  {{ type.cyrilicName }}
                 </option>
               </select>
             </div>
@@ -131,10 +131,27 @@ export default {
         this.product = response.data;
       })
     },
-    loadTypes() {
-      TypeService.allTypes().then((response) => {
-        this.types = response.data;
+    getCyrilicName(name) {
+      if(name === "DOGS") return "Кучиња";
+      else if(name === "CATS") return "Мачиња";
+      else if(name === "RODENTS") return "Глодари";
+      else if(name === "BIRDS") return "Птици";
+      else if(name === "AQUA") return "Акваристика";
+    },
+    addCyrilicName() {
+      this.types.forEach(v => {
+        v.cyrilicName = this.getCyrilicName(v.name);
       })
+    },
+    loadTypes() {
+      TypeService.allTypes().then(response => {
+      this.types = response.data.map((v, i) => {return {
+          name: v,
+          id: i
+        }});
+        this.selectedType = this.types[0];
+        this.addCyrilicName();
+    }).catch(e => { console.log(e) })
     }
   },
   mounted() {

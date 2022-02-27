@@ -85,7 +85,7 @@
               Производи:
               <div v-for="p in o.products" :key="p.index">
                 <span class="text-primary">
-                  {{ p.name }}, {{ p.type.name }}</span
+                  {{ p.name }}, {{ getCyrilicName(p.type.name) }}</span
                 >
               </div>
             </div>
@@ -126,7 +126,14 @@ export default {
         OrderService.allOrders().then((response) => {
           this.orders = response.data;
         })
-    }
+    },
+    getCyrilicName(name) {
+      if(name === "DOGS") return "Кучиња";
+      else if(name === "CATS") return "Мачиња";
+      else if(name === "RODENTS") return "Глодари";
+      else if(name === "BIRDS") return "Птици";
+      else if(name === "AQUA") return "Акваристика";
+    },
   },
   mounted() {
     this.loadOrders();
