@@ -22,28 +22,14 @@
                 class="nav-link"
                 :class="{ active: selectedType.name == type.name }"
                 @click="changeSelectedType(type)"
-                >{{ type.name }}</span
+                >{{ type.cyrilicName }}</span
               >
-            </li>
-            <li
-              class="h5 font-weight-bold text-uppercase nav-item mx-1"
-              v-show="user == null ? false: user.role ===
-          'ROLE_ADMIN'"
-            >
-              <span
-                ><input
-                  @keyup.enter.prevent="addNewType()"
-                  v-model="newType"
-                  type="text"
-                  class="nav-link"
-                  placeholder="Додади нова колекција"
-              /></span>
             </li>
           </ul>
         </div>
         <div
           v-for="product in products"
-          v-show="product.type.name == selectedType.name"
+          v-show="product.type == selectedType.name"
           :key="product.id"
           class="col-lg-4"
         >
@@ -121,23 +107,33 @@ export default {
     changeSelectedType(type) {
       this.selectedType = type;
     },
-    addNewType() {
-      TypeService.add({name: this.newType}).then( () => {
-        this.loadTypes()
-        this.newType = "";
-      });
-
-    },
     loadProducts() {
       ProductService.allProducts().then(response => {
         this.products = response.data;
         console.log(this.products)
       })
     },
+    getCyrilicName(name) {
+      if(name === "DOGS") return "Кучиња";
+      else if(name === "CATS") return "Мачиња";
+      else if(name === "RODENTS") return "Глодари";
+      else if(name === "BIRDS") return "Птици";
+      else if(name === "AQUA") return "Акваристика";
+    },
+    addCyrilicName() {
+      this.types.forEach(v => {
+        v.cyrilicName = this.getCyrilicName(v.name);
+      })
+    },
     loadTypes() {
       TypeService.allTypes().then(response => {
-        this.types = response.data;
+        console.log("types", response.data);
+        this.types = response.data.map((v, i) => {return {
+          name: v,
+          id: i
+        }});
         this.selectedType = this.types[0];
+        this.addCyrilicName();
       })
     }
   },

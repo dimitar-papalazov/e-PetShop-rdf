@@ -2,13 +2,10 @@ import axios from "../custom-axios/axios";
 
 const TypeService = {
     allTypes: () => {
-        return axios.get("/api/types");
+        return axios.get("/api/products/types");
     },
     productsByType: (type) => {
-        return axios.get("/api/types/by-type", type);
-    },
-    add:(type) => {
-        return axios.post("/api/types/add", type);
+        return axios.get("/api/products/by-type", type);
     }
 }
 

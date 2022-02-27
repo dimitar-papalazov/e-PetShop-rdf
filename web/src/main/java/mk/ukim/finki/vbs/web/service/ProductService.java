@@ -33,21 +33,22 @@ public class ProductService {
     public List<Product> findMostSellingProducts() {
         List<Product> products = findAll();
         products.sort((p1, p2) -> p2.getSold().compareTo(p1.getSold()));
-
-        if (products.size() <= 6) {
-            return products;
-        }
-        return products.subList(0, 6);
+        return products.size() < 6 ? products : products.subList(0, 6);
     }
 
     public List<Product> findSimilarProducts(Long id) {
+        System.out.println("tuka1");
         Product product = this.findProduct(id);
+        System.out.println("tuka2");
         List<Product> products = findAll();
+        System.out.println("tuka3");
         products.sort((p1, p2) -> p2.getSold().compareTo(p1.getSold()));
-        return products.stream()
-                .filter((x) -> x.getType().equals(product.getType()))
-                .collect(Collectors.toList())
-                .subList(0, 4);
+        System.out.println("tuka4");
+        products = products.stream()
+                    .filter((x) -> x.getType().equals(product.getType()))
+                    .filter((x) -> !x.getId().equals(product.getId()))
+                    .collect(Collectors.toList());
+        return products.size() < 4 ? products : products.subList(0, 4);
     }
 
     public Product deleteById(Long id) {

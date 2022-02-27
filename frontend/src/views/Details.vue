@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="col-lg-12">
-              <h4 class="mt-5">{{ product.type.name }}</h4>
+              <h4 class="mt-5">{{ getCyrilicName(product.type) }}</h4>
             </div>
             <div class="col-lg-12 mb-5">
               <button
@@ -122,6 +122,13 @@ export default {
       ProductService.details(this.id).then(response => {
         this.product = response.data;
       })
+    },
+    getCyrilicName(name) {
+      if(name === "DOGS") return "Кучиња";
+      else if(name === "CATS") return "Мачиња";
+      else if(name === "RODENTS") return "Глодари";
+      else if(name === "BIRDS") return "Птици";
+      else if(name === "AQUA") return "Акваристика";
     }
   },
   created() {
