@@ -4,7 +4,6 @@ import mk.ukim.finki.vbs.web.model.Product;
 import mk.ukim.finki.vbs.web.model.dto.ProductDto;
 import mk.ukim.finki.vbs.web.model.enumerations.Type;
 import mk.ukim.finki.vbs.web.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

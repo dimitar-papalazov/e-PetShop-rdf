@@ -1,19 +1,30 @@
 package mk.ukim.finki.vbs.web.config;
 
+import mk.ukim.finki.vbs.web.model.Member;
 import mk.ukim.finki.vbs.web.model.Product;
+import mk.ukim.finki.vbs.web.model.dto.OrderDto;
 import mk.ukim.finki.vbs.web.model.dto.ProductDto;
+import mk.ukim.finki.vbs.web.model.enumerations.MemberRole;
 import mk.ukim.finki.vbs.web.model.enumerations.Type;
+import mk.ukim.finki.vbs.web.service.MemberService;
+import mk.ukim.finki.vbs.web.service.OrderService;
 import mk.ukim.finki.vbs.web.service.ProductService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DataInitializer {
     private final ProductService productService;
+    private final MemberService userService;
+    private final OrderService orderService;
 
-    public DataInitializer(ProductService productService) {
+    public DataInitializer(ProductService productService, MemberService userService, OrderService orderService) {
         this.productService = productService;
+        this.userService = userService;
+        this.orderService = orderService;
     }
 
     @PostConstruct
@@ -121,5 +132,31 @@ public class DataInitializer {
                 1090.0,
                 10,
                 0));
+
+        Member admin = this.userService.register("admin",
+                        "epetshop.project@gmail.com", "admin","admin", "admin",
+                        "admin",
+                        MemberRole.ROLE_ADMIN);
+        Member dp = this.userService.register("dp", "d.papalazov@outlook.com"
+                , "dp", "dp", "Dimitar", " Papalazov", MemberRole.ROLE_USER);
+        Member as = this.userService.register("as", "yourpapauniverse@gmail.com"
+                , "as", "as", "Angela", " Sotirovska", MemberRole.ROLE_USER);
+
+        List<Long> dpProducts = new ArrayList<>();
+        dpProducts.add(catScratcher.getId());
+        dpProducts.add(catFood.getId());
+        dpProducts.add(catToy.getId());
+
+        List<Long> asProducts = new ArrayList<>();
+        asProducts.add(dogFood.getId());
+        asProducts.add(dogContainer.getId());
+
+        System.out.println(dp.getUsername());
+        orderService.addOrder(new OrderDto(dp.getUsername(), "+38975835665",
+                "Krume Kepeski 26", "Bitola", "7000", true, dpProducts));
+        orderService.addOrder(new OrderDto(as.getUsername(), "+38970000000",
+                "Ulica ulica 13", "Skopje", "0000", false, asProducts));
+
+
     }
 }
