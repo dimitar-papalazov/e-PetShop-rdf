@@ -23,14 +23,16 @@ public class AuthService{
         if (username==null || username.isEmpty() || password==null || password.isEmpty()) {
             throw new InvalidArgumentsException();
         }
-        Member member = memberRepo.findByUsername(username).get();
-        if(member != null) {
+        if(memberRepo.findByUsername(username).isPresent()) {
+            Member member = memberRepo.findByUsername(username).get();
+            System.out.println("sent " + passwordEncoder.encode(password) +
+                            " in base " + member.getPassword());
             if(passwordEncoder.matches(password, member.getPassword())) {
                 return member;
             }
             throw new InvalidUserCredentialsException();
         }
-        throw new InvalidUserCredentialsException();
+        return null;
     }
 
 }

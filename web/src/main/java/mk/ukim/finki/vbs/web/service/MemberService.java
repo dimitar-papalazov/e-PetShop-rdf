@@ -33,13 +33,13 @@ public class MemberService {
             throw new PasswordsDoNotMatchException();
         if(this.memberRepo.findByUsername(username).isPresent())
             return this.memberRepo.findByUsername(username).get();
-            //throw new UsernameAlreadyExistsException(username);
         if(this.memberRepo.findByEmail(email).isPresent())
             return this.memberRepo.findByEmail(email).get();
-            //throw new EmailAlreadyExistsException(email);
-        Member member = new Member(username,email,passwordEncoder.encode(password),firstName,lastName,role);
-        //if (member.getRole().equals(MemberRole.ROLE_USER))
-            return memberRepo.save(member);
+        Member member = new Member(username, email,
+                passwordEncoder.encode(password), firstName, lastName, role);
+        System.out.println(username + " " + email+ " " +
+                passwordEncoder.encode(password)+ " " + firstName+ " " + lastName+ " " + role);
+        return memberRepo.save(member);
     }
 
 
