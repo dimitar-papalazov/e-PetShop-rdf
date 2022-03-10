@@ -25,8 +25,6 @@ public class AuthService{
         }
         if(memberRepo.findByUsername(username).isPresent()) {
             Member member = memberRepo.findByUsername(username).get();
-            System.out.println("sent " + passwordEncoder.encode(password) +
-                            " in base " + member.getPassword());
             if(passwordEncoder.matches(password, member.getPassword())) {
                 return member;
             }

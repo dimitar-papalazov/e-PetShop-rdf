@@ -32,7 +32,7 @@ public class Order {
 
     private Boolean toDoor;
 
-//    private Long trackingNumber;
+    private Long trackingNumber;
 
     @Relationship(type="ORDERED", direction=Relationship.INCOMING)
     private List<Product> products;
@@ -40,9 +40,9 @@ public class Order {
     public Order() {
     }
 
-//    public void setTrackingNumber(Long trackingNumber) {
-//        this.trackingNumber = trackingNumber;
-//    }
+    public void setTrackingNumber(Long trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
 
     public Order(Member member, String phoneNumber, String address, String city, String postalCode, Boolean toDoor , List<Product> products){
         this.member=member;
@@ -113,6 +113,10 @@ public class Order {
 
     public String getPostalCode() {
         return postalCode;
+    }
+
+    public Long getTrackingNumber() {
+        return trackingNumber;
     }
 
     public Boolean getToDoor() {

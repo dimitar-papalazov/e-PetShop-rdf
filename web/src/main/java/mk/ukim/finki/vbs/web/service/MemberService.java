@@ -37,8 +37,6 @@ public class MemberService {
             return this.memberRepo.findByEmail(email).get();
         Member member = new Member(username, email,
                 passwordEncoder.encode(password), firstName, lastName, role);
-        System.out.println(username + " " + email+ " " +
-                passwordEncoder.encode(password)+ " " + firstName+ " " + lastName+ " " + role);
         return memberRepo.save(member);
     }
 

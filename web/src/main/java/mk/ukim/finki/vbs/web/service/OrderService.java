@@ -10,6 +10,7 @@ import mk.ukim.finki.vbs.web.repository.MemberRepository;
 import mk.ukim.finki.vbs.web.repository.OrderRepository;
 import mk.ukim.finki.vbs.web.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,13 @@ public class OrderService {
         return this.orderRepo.findById(id).orElseThrow(InvalidOrder::new);
     }
 
+    public Order editTrackingNumber(Long id, Long number) {
+        Order o = findOrder(id);
+        o.setTrackingNumber(number);
+        return this.orderRepo.save(o);
+    }
+
     public Optional<Order> addOrder(OrderDto orderDto) {
-        System.out.println(orderDto.getUsername());
         Member member = this.memberRepo.findById(orderDto.getUsername())
                 .orElseThrow(() -> new InvalidUsernameException());
         List<Product> products = new ArrayList<>();

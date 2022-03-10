@@ -34,16 +34,16 @@ public class OrderRestController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-//    @PostMapping("/edit")
-//    public ResponseEntity<Order> save(@RequestParam Long id,
-//                                      @RequestParam Long number) {
-//        try {
-//            Order o = this.orderService.editTrackingNumber(id, number);
-//            return ResponseEntity.ok().body(o);
-//        }
-//        catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PostMapping("/edit")
+    public ResponseEntity<Order> save(@RequestParam Long id,
+                                      @RequestParam Long number) {
+        try {
+            Order o = this.orderService.editTrackingNumber(id, number);
+            return ResponseEntity.ok().body(o);
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }
