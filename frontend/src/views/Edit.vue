@@ -46,7 +46,7 @@
                 v-model="product.type"
                 class="custom-select form-control"
               >
-                <option v-for="type in types" :key="type.id" :value="type.id">
+                <option v-for="type in types" :key="type.id" :value="type.name">
                   {{ type.cyrilicName }}
                 </option>
               </select>
@@ -55,7 +55,7 @@
             <div class="col-lg-12 mt-5">
               <small class="text-primary"
                 >Ова нема да се прикажува на купувачите</small
-              >
+              ><br/>
               <label>Внесете залиха на производот</label>
               <input
                 placeholder="Внесете залиха на производот"
@@ -113,10 +113,11 @@ export default {
   },
   methods: {
     modifyProduct() {
+      console.log(this.product);
       ProductService.edit(this.product.id,{
         price: this.product.price,
         name: this.product.name,
-        type: this.product.type.id,
+        type: this.getTypeId(this.product.type),
         quantity: this.product.quantity,
         imageUrl: this.product.imageUrl,
         sale: this.product.sale,
@@ -126,9 +127,17 @@ export default {
         this.$router.push("/");
       });
     },
+    getTypeId(name) {
+      if(name === "DOGS") return 0;
+      else if(name === "CATS") return 1;
+      else if(name === "RODENTS") return 2;
+      else if(name === "BIRDS") return 3;
+      else if(name === "AQUA") return 4;
+    },
     loadProduct() {
       ProductService.details(this.id).then((response) => {
         this.product = response.data;
+        console.log(this.product);
       })
     },
     getCyrilicName(name) {

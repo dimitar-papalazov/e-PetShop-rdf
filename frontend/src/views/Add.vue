@@ -40,7 +40,7 @@
                 v-model="product.type"
                 class="custom-select form-control"
               >
-                <option v-for="type in types" :key="type.id" :value="type.id">
+                <option v-for="type in types" :key="type.id" :value="type.name">
                   {{ type.cyrilicName }}
                 </option>
               </select>
@@ -102,6 +102,7 @@ export default {
   methods: {
     addToDb() {
       console.log(this.product)
+      this.product.type = this.getTypeId(this.product.type);
       ProductService.add(this.product)
           .then(() => {
             alert("Успешно додаден производ!")
@@ -111,7 +112,13 @@ export default {
         console.log(e)
       })
     },
-  },
+    getTypeId(name) {
+      if(name === "DOGS") return 0;
+      else if(name === "CATS") return 1;
+      else if(name === "RODENTS") return 2;
+      else if(name === "BIRDS") return 3;
+      else if(name === "AQUA") return 4;
+    },
     getCyrilicName(name) {
       if(name === "DOGS") return "Кучиња";
       else if(name === "CATS") return "Мачиња";
@@ -124,6 +131,7 @@ export default {
         v.cyrilicName = this.getCyrilicName(v.name);
       })
     },
+  },
   created(){
     ProductService.allProducts().then(response=>{console.log(response.data[0])})
     TypeService.allTypes().then(response => {
