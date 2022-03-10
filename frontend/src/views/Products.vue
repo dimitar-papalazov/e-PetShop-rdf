@@ -120,6 +120,7 @@ export default {
       return this.$store.state.loggedIn;
     },
     user() {
+      console.log(this.$store.state.user);
       return this.$store.state.user;
     }
   },
