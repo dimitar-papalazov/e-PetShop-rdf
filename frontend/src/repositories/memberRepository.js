@@ -12,11 +12,7 @@ const MemberService = {
     },
     login: (username, passwod) => {
         return axios.get("/api/members/login?username="+username + "&password="+passwod);
-    },
-    verify: (code, username) => {
-        return axios.post("/api/members/verify?code="+code + "&username="+username);
     }
-
 };
 
 export default MemberService;
