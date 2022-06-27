@@ -1,31 +1,48 @@
-import { DataFactory } from 'n3';
-import { Store } from 'n3';
-import { Writer } from 'n3';
+import MemDown from 'memdown';
+import { DataFactory } from 'rdf-data-factory';
+import { Quadstore } from 'quadstore/dist/lib/quadstore.js';
+import { Engine } from 'quadstore-comunica';
 
-const {namedNode, literal, defaultGraph, quad} = DataFactory;
+const backend = MemDown();
+const dataFactory = new DataFactory();
+const store = new Quadstore({ backend, dataFactory });
 
-const myQuad = quad(
-  namedNode('http://example.org/cartoons#Tom'),
-  namedNode('http://example.org/cartoons#name'),
-  literal('Tom'),
-  defaultGraph(),
-);
+store.open()
+  .then(() => {
+    const engine = new Engine(store);
 
-console.log(myQuad.termType);              
-console.log(myQuad.value);                 
-console.log(myQuad.subject.value);         
-console.log(myQuad.object.value);          
-console.log(myQuad.object.datatype.value); 
-console.log(myQuad.object.language);
+    store.put(dataFactory.quad(
+      dataFactory.namedNode('http://example.com/subject'),
+      dataFactory.namedNode('http://example.com/predicate'),
+      dataFactory.namedNode('http://example.com/object'),
+      dataFactory.defaultGraph(),
+    ));
+    store.put(dataFactory.quad(
+      dataFactory.namedNode('http://example.com/a'),
+      dataFactory.namedNode('http://example.com/a'),
+      dataFactory.namedNode('http://example.com/a'),
+      dataFactory.defaultGraph(),
+    ));
+    store.put(dataFactory.quad(
+      dataFactory.namedNode('http://example.com/b'),
+      dataFactory.namedNode('http://example.com/b'),
+      dataFactory.namedNode('http://example.com/b'),
+      dataFactory.defaultGraph(),
+    ));
 
-const store = new Store();
+    return engine.query('SELECT ?s { ?s ?p ?o}');
+  })
+  .then(query => {
+    return query.execute();
+  })
+  .then(bindingsStream => {
+    return bindingsStream.toArray();
+  })
+  .then(array => {
+    array.forEach((a, i) => {
+      console.log(i, a.get("s").value)
+    })
+  });
 
-store.add(myQuad);
-
-console.log(store)
-
-const writer = new Writer({ prefixes: { c: 'http://example.org/cartoons#' } });
-writer.addQuad(store.getQuads()[0]);
-writer.end((error, result) => {
-  
-});
+//https://github.com/belayeng/quadstore
+//https://comunica.dev/docs/query/getting_started/query_app/

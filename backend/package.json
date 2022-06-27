@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "graphy": "^4.3.5",
-    "n3": "^1.16.2"
+    "@rdfjs/dataset": "^2.0.1",
+    "memdown": "^6.1.1",
+    "quadstore": "^10.0.0",
+    "quadstore-comunica": "^2.0.0",
+    "rdf-data-factory": "^1.1.0"
   }
 }
