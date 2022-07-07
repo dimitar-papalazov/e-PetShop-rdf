@@ -1,74 +1,80 @@
-import DatasetCore from "@rdfjs/dataset/DatasetCore";
+import DatasetCore from "@rdfjs/dataset/DatasetCore.js";
 import { DefaultGraph, Quad } from "rdf-data-factory";
+import oxigraph from "oxigraph";
 
 export default class Member extends DatasetCore {
   constructor(username, email, password, firstName, lastName, role) {
-    this.quads = [];
-    this._id = `http://www.rdf-petshop.com/member#${username}`;
+    super();
+    this.triples = [];
+    this._id = `http://www.rdf-petshop.com/member/${username}`;
 
+    this.createId();
     this.createEmail(email);
     this.createPassword(password);
     this.createFirstName(firstName);
     this.createLastName(lastName);
     this.createRole(role);
     this.createPOJO(username, email, password, firstName, lastName, role);
+  }
 
-    super(this.quads);
+  createId() {
+    this.id = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/id"),
+      oxigraph.literal(this._id)
+    );
+
+    this.triples.push(this.id);
   }
 
   createEmail(email) {
-    this.email = new Quad(
-      this._id,
-      "http://dbpedia.org/property/email",
-      email,
-      new DefaultGraph()
+    this.email = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/property/email"),
+      oxigraph.literal(email)
     );
 
-    this.quads.push(this.email);
+    this.triples.push(this.email);
   }
 
   createPassword(password) {
-    this.password = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/password",
-      password,
-      new DefaultGraph()
+    this.password = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/password"),
+      oxigraph.literal(password)
     );
 
-    this.quads.push(this.password);
+    this.triples.push(this.password);
   }
 
   createFirstName(firstName) {
-    this.firstName = new Quad(
-      this._id,
-      "http://dbpedia.org/property/firstname",
-      firstName,
-      new DefaultGraph()
+    this.firstName = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/property/firstname"),
+      oxigraph.literal(firstName)
     );
 
-    this.quads.push(this.firstName);
+    this.triples.push(this.firstName);
   }
 
   createLastName(lastName) {
-    this.lastName = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/lastname",
-      lastName,
-      new DefaultGraph()
+    this.lastName = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/lastname"),
+      oxigraph.literal(lastName)
     );
 
-    this.quads.push(this.lastName);
+    this.triples.push(this.lastName);
   }
 
   createRole(role) {
-    this.role = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/role",
-      role,
-      new DefaultGraph()
+    this.role = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/role"),
+      oxigraph.literal(role)
     );
 
-    this.quads.push(this.role);
+    this.triples.push(this.role);
   }
 
   createPOJO(username, email, password, firstName, lastName, role) {

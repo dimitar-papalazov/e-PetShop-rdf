@@ -2,7 +2,7 @@ import MemDown from "memdown";
 import { Quadstore } from "quadstore";
 import { Engine } from "quadstore-comunica";
 import { DataFactory } from "rdf-data-factory";
-import Order from "../model-layer/Order";
+import Order from "../model-layer/Order.js";
 
 export default class OrderService {
   constructor() {
@@ -17,7 +17,7 @@ export default class OrderService {
   }
 
   open() {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.store.open().then(() => {
         this.engine = new Engine(this.store);
         resolve();

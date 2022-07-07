@@ -1,4 +1,4 @@
-import DatasetCore from "@rdfjs/dataset/DatasetCore";
+import DatasetCore from "@rdfjs/dataset/DatasetCore.js";
 import { DefaultGraph, Quad } from "rdf-data-factory";
 
 export default class Order extends DatasetCore {
@@ -14,7 +14,8 @@ export default class Order extends DatasetCore {
     trackingNumber,
     products
   ) {
-    this._quads = [];
+    super();
+    this.quads = [];
     this._id = `http://www.rdf-petshop.com/order#${id}`;
 
     this.createMember(member);
@@ -41,8 +42,6 @@ export default class Order extends DatasetCore {
       trackingNumber,
       products
     );
-
-    super(this._quads);
   }
 
   createDateOrder(dateOrder) {
@@ -53,7 +52,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.dateOrder);
+    this.quads.push(this.dateOrder);
   }
 
   createMember(member) {
@@ -64,7 +63,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.member);
+    this.quads.push(this.member);
   }
 
   createPhoneNumber(phoneNumber) {
@@ -75,7 +74,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.phoneNumber);
+    this.quads.push(this.phoneNumber);
   }
 
   createAddress(address) {
@@ -86,7 +85,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.address);
+    this.quads.push(this.address);
   }
 
   createCity(city) {
@@ -97,7 +96,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.city);
+    this.quads.push(this.city);
   }
 
   createPostalCode(postalCode) {
@@ -108,7 +107,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.postalCode);
+    this.quads.push(this.postalCode);
   }
 
   createToDoor(toDoor) {
@@ -119,7 +118,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.toDoor);
+    this.quads.push(this.toDoor);
   }
 
   createTrackingNumber(trackingNumber) {
@@ -130,7 +129,7 @@ export default class Order extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.trackingNumber);
+    this.quads.push(this.trackingNumber);
   }
 
   createProducts(products) {
@@ -144,7 +143,7 @@ export default class Order extends DatasetCore {
       );
 
       this.products.push(p);
-      this._quads.push(p);
+      this.quads.push(p);
     });
   }
 

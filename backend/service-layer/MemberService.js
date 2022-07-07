@@ -1,28 +1,13 @@
-import MemDown from "memdown";
-import { Quadstore } from "quadstore";
-import { Engine } from "quadstore-comunica";
-import { DataFactory } from "rdf-data-factory";
-import Member from "../model-layer/Member";
+import Member from "../model-layer/Member.js";
+import oxigraph from "oxigraph";
 
 export default class MemberService {
   constructor() {
-    this.store = new Quadstore({
-      backend: MemDown(),
-      dataFactory: new DataFactory(),
-    });
+    this.store = new oxigraph.Store();
 
-    this.baseURI = "http://www.rdf-petshop.com/member#";
+    this.baseURI = "http://www.rdf-petshop.com/member/";
     this.usernames = [];
     this.members = [];
-  }
-
-  open() {
-    new Promise((resolve, reject) => {
-      this.store.open().then(() => {
-        this.engine = new Engine(this.store);
-        resolve();
-      });
-    });
   }
 
   addMember(username, email, password, firstName, lastName, role) {
@@ -40,11 +25,11 @@ export default class MemberService {
       role
     );
 
-    member.quads.forEach((q) => {
-      this.store.put(q);
-    });
+    member.triples.forEach((triple) => this.store.add(triple));
 
     this.members.push(member);
+
+    return member.POJO;
   }
 
   editMember(username, email, password, firstName, lastName, role) {
@@ -63,16 +48,16 @@ export default class MemberService {
 
     member = new Member(username, email, password, firstName, lastName, role);
 
-    member.quads.forEach((q) => {
-      this.store.put(q);
-    });
+    member.triples.forEach((triple) => this.store.add(triple));
   }
 
   removeMember(username) {
     if (!this.usernames.includes(username))
       throw "Username " + username + " doesn't exists!";
 
-    this.store.removeMatches(username);
+    const memeber = this.members.find((member) => member.username === username);
+
+    this.store.delete(memeber);
 
     const index = this.usernames.indexOf(username);
 
@@ -81,29 +66,26 @@ export default class MemberService {
   }
 
   query(queryString) {
-    return this.engine
-      .query(queryString)
-      .then((query) => {
-        return query.execute();
-      })
-      .then((bindingsStream) => {
-        return bindingsStream.toArray();
-      })
-      .then((array) => {
-        const result = array
-          .map((v) => v.get("s"))
-          .filter((v, i, a) => a.indexOf(v) === i);
+    const subejcts = [];
 
-        return this.membersFromResult(result);
-      });
+    for (const binding of this.store.query(queryString)) {
+      console.log(binding);
+      subejcts.push(binding.get("s").value);
+    }
+
+    return this.membersFromResult(subejcts)[0];
   }
 
   membersFromResult(result) {
     const members = [];
+    const addedId = [];
 
     result.forEach((v) => {
       this.members.forEach((m) => {
-        if (m._id === v) members.push(m.toPOJO());
+        if (m._id === v && !addedId.includes(v)) {
+          members.push(m.POJO);
+        }
+        addedId.push(v);
       });
     });
 

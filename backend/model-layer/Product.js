@@ -1,9 +1,10 @@
-import DatasetCore from "@rdfjs/dataset/DatasetCore";
+import DatasetCore from "@rdfjs/dataset/DatasetCore.js";
 import { DefaultGraph, Quad } from "rdf-data-factory";
 
 export default class Product extends DatasetCore {
   constructor(id, type, imageUrl, price, name, quantity, sale, sold) {
-    this._quads = [];
+    super();
+    this.quads = [];
     this._id = `http://www.rdf-petshop.com/product#${id}`;
 
     this.createType(type);
@@ -15,7 +16,6 @@ export default class Product extends DatasetCore {
     this.createSold(sold);
     this.createPOJO(id, type, imageUrl, price, name, quantity, sale, sold);
 
-    super(this._quads);
   }
 
   createType(type) {
@@ -26,7 +26,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.type);
+    this.quads.push(this.type);
   }
 
   createImageUrl(imageUrl) {
@@ -37,7 +37,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.imageUrl);
+    this.quads.push(this.imageUrl);
   }
 
   createPrice(price) {
@@ -48,7 +48,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.price);
+    this.quads.push(this.price);
   }
 
   createName(name) {
@@ -59,7 +59,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.name);
+    this.quads.push(this.name);
   }
 
   createQuantity(quantity) {
@@ -70,7 +70,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.quantity);
+    this.quads.push(this.quantity);
   }
 
   createSale(sale) {
@@ -81,7 +81,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.sale);
+    this.quads.push(this.sale);
   }
 
   createSold(sold) {
@@ -92,7 +92,7 @@ export default class Product extends DatasetCore {
       new DefaultGraph()
     );
 
-    this._quads.push(this.sold);
+    this.quads.push(this.sold);
   }
 
   createPOJO(id, type, imageUrl, price, name, quantity, sale, sold) {
