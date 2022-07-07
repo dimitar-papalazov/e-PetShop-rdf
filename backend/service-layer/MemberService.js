@@ -44,7 +44,7 @@ export default class MemberService {
     if (typeof lastName === "undefined") lastName = member.lastName;
     if (typeof role === "undefined") role = member.role;
 
-    this.store.removeMatches(username);
+    this.removeMember(username);
 
     member = new Member(username, email, password, firstName, lastName, role);
 
@@ -55,9 +55,9 @@ export default class MemberService {
     if (!this.usernames.includes(username))
       throw "Username " + username + " doesn't exists!";
 
-    const memeber = this.members.find((member) => member.username === username);
+    const member = this.members.find((member) => member._id === username);
 
-    this.store.delete(memeber);
+    this.store.delete(member);
 
     const index = this.usernames.indexOf(username);
 
@@ -69,11 +69,10 @@ export default class MemberService {
     const subejcts = [];
 
     for (const binding of this.store.query(queryString)) {
-      console.log(binding);
       subejcts.push(binding.get("s").value);
     }
 
-    return this.membersFromResult(subejcts)[0];
+    return this.membersFromResult(subejcts);
   }
 
   membersFromResult(result) {

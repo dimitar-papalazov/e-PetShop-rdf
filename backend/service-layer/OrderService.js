@@ -1,28 +1,13 @@
-import MemDown from "memdown";
-import { Quadstore } from "quadstore";
-import { Engine } from "quadstore-comunica";
-import { DataFactory } from "rdf-data-factory";
+import oxigraph from "oxigraph";
 import Order from "../model-layer/Order.js";
 
 export default class OrderService {
   constructor() {
-    this.store = new Quadstore({
-      backend: MemDown(),
-      dataFactory: new DataFactory(),
-    });
+    this.store = new oxigraph.Store();
 
-    this.baseURI = "http://www.rdf-petshop.com/order#";
+    this.baseURI = "http://www.rdf-petshop.com/order/";
     this.orderIds = [];
     this.orders = [];
-  }
-
-  open() {
-    return new Promise((resolve, reject) => {
-      this.store.open().then(() => {
-        this.engine = new Engine(this.store);
-        resolve();
-      });
-    });
   }
 
   addOrder(
@@ -55,8 +40,8 @@ export default class OrderService {
       products
     );
 
-    order.quads.forEach((q) => {
-      this.store.put(q);
+    order.triples.forEach((q) => {
+      this.store.add(q);
     });
 
     this.orders.push(order);
@@ -90,7 +75,7 @@ export default class OrderService {
       trackingNumber = order.trackingNumber;
     if (typeof products === "undefined") products = order.products;
 
-    this.store.removeMatches(id);
+    this.removeOrder(id);
 
     order = new Order(
       id,
@@ -106,7 +91,7 @@ export default class OrderService {
     );
 
     order.quads.forEach((q) => {
-      this.store.put(q);
+      this.store.add(q);
     });
   }
 
@@ -114,7 +99,9 @@ export default class OrderService {
     if (!this.orderIds.includes(id))
       throw "Order with id: " + id + " doesn't exists!";
 
-    this.store.removeMatches(id);
+    const order = this.orders.find((o) => o._id === id);
+
+    this.store.delete(order);
 
     const index = this.orderIds.indexOf(id);
 
@@ -123,29 +110,25 @@ export default class OrderService {
   }
 
   query(queryString) {
-    return this.engine
-      .query(queryString)
-      .then((query) => {
-        return query.execute();
-      })
-      .then((bindingsStream) => {
-        return bindingsStream.toArray();
-      })
-      .then((array) => {
-        const result = array
-          .map((v) => v.get("s"))
-          .filter((v, i, a) => a.indexOf(v) === i);
+    const subejcts = [];
 
-        return this.ordersFromResult(result);
-      });
+    for (const binding of this.store.query(queryString)) {
+      subejcts.push(binding.get("s").value);
+    }
+
+    return this.ordersFromResult(subejcts);
   }
 
   ordersFromResult(result) {
     const orders = [];
+    const addedId = [];
 
     result.forEach((v) => {
       this.orders.forEach((o) => {
-        if (o._id === v) orders.push(o.toPOJO());
+        if (o._id === v && !addedId.includes(v)) {
+          orders.push(o.POJO);
+          addedId.push(v);
+        }
       });
     });
 

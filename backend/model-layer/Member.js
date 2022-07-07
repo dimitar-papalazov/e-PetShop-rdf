@@ -1,8 +1,6 @@
-import DatasetCore from "@rdfjs/dataset/DatasetCore.js";
-import { DefaultGraph, Quad } from "rdf-data-factory";
 import oxigraph from "oxigraph";
 
-export default class Member extends DatasetCore {
+export default class Member {
   constructor(username, email, password, firstName, lastName, role) {
     super();
     this.triples = [];

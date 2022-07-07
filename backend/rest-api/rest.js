@@ -52,5 +52,5 @@ app.get(baseUrl + "/members/login", function (req, res) {
   }
   `);
 
-  res.send(member);
+  res.send(member[0]);
 });

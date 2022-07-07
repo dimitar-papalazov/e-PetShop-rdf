@@ -1,7 +1,6 @@
-import DatasetCore from "@rdfjs/dataset/DatasetCore.js";
-import { DefaultGraph, Quad } from "rdf-data-factory";
+import oxigraph from "oxigraph";
 
-export default class Order extends DatasetCore {
+export default class Order {
   constructor(
     id,
     dateOrder,
@@ -15,9 +14,10 @@ export default class Order extends DatasetCore {
     products
   ) {
     super();
-    this.quads = [];
-    this._id = `http://www.rdf-petshop.com/order#${id}`;
+    this.triples = [];
+    this._id = `http://www.rdf-petshop.com/order/${id}`;
 
+    this.createId();
     this.createMember(member);
     this.createPhoneNumber(phoneNumber);
     this.createAddress(address);
@@ -44,106 +44,107 @@ export default class Order extends DatasetCore {
     );
   }
 
-  createDateOrder(dateOrder) {
-    this.dateOrder = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/date",
-      dateOrder,
-      new DefaultGraph()
+  createId() {
+    this.id = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/id"),
+      oxigraph.literal(this._id)
     );
 
-    this.quads.push(this.dateOrder);
+    this.triples.push(this.id);
+  }
+
+  createDateOrder(dateOrder) {
+    this.dateOrder = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/date"),
+      oxigraph.literal(dateOrder)
+    );
+
+    this.triples.push(this.dateOrder);
   }
 
   createMember(member) {
-    this.member = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/member",
-      member,
-      new DefaultGraph()
+    this.member = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/member"),
+      oxigraph.literal(member)
     );
 
-    this.quads.push(this.member);
+    this.triples.push(this.member);
   }
 
   createPhoneNumber(phoneNumber) {
-    this.firstNaphoneNumberme = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/MobilePhone",
-      phoneNumber,
-      new DefaultGraph()
+    this.firstNaphoneNumberme = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/MobilePhone"),
+      oxigraph.literal(phoneNumber)
     );
 
-    this.quads.push(this.phoneNumber);
+    this.triples.push(this.phoneNumber);
   }
 
   createAddress(address) {
-    this.address = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/address",
-      address,
-      new DefaultGraph()
+    this.address = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/address"),
+      oxigraph.literal(address)
     );
 
-    this.quads.push(this.address);
+    this.triples.push(this.address);
   }
 
   createCity(city) {
-    this.city = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/city",
-      city,
-      new DefaultGraph()
+    this.city = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/city"),
+      oxigraph.literal(city)
     );
 
-    this.quads.push(this.city);
+    this.triples.push(this.city);
   }
 
   createPostalCode(postalCode) {
-    this.postalCode = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/postalCode",
-      postalCode,
-      new DefaultGraph()
+    this.postalCode = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/postalCode"),
+      oxigraph.literal(postalCode)
     );
 
-    this.quads.push(this.postalCode);
+    this.triples.push(this.postalCode);
   }
 
   createToDoor(toDoor) {
-    this.toDoor = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/type",
-      toDoor,
-      new DefaultGraph()
+    this.toDoor = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/type"),
+      oxigraph.literal(toDoor)
     );
 
-    this.quads.push(this.toDoor);
+    this.triples.push(this.toDoor);
   }
 
   createTrackingNumber(trackingNumber) {
-    this.trackingNumber = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/trackNumber",
-      trackingNumber,
-      new DefaultGraph()
+    this.trackingNumber = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/trackNumber"),
+      oxigraph.literal(trackingNumber)
     );
 
-    this.quads.push(this.trackingNumber);
+    this.triples.push(this.trackingNumber);
   }
 
   createProducts(products) {
     this.products = [];
     products.forEach((p) => {
-      const product = new Quad(
-        this._id,
-        "http://dbpedia.org/ontology/product",
-        p,
-        new DefaultGraph()
+      const product = oxigraph.triple(
+        oxigraph.namedNode(this._id),
+        oxigraph.namedNode("http://dbpedia.org/ontology/product"),
+        oxigraph.literal(p)
       );
 
-      this.products.push(p);
-      this.quads.push(p);
+      this.products.push(product);
+      this.triples.push(product);
     });
   }
 
@@ -174,11 +175,10 @@ export default class Order extends DatasetCore {
   }
 
   setTrackingNumber(trackingNumber) {
-    this.trackingNumber = new Quad(
-      this._id,
-      "http://dbpedia.org/ontology/trackNumber",
-      trackingNumber,
-      new DefaultGraph()
+    this.trackingNumber = oxigraph.triple(
+      oxigraph.namedNode(this._id),
+      oxigraph.namedNode("http://dbpedia.org/ontology/trackNumber"),
+      oxigraph.literal(trackingNumber)
     );
 
     this.add(this.trackingNumber);

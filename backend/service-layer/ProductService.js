@@ -1,28 +1,13 @@
-import MemDown from "memdown";
-import { Quadstore } from "quadstore";
-import { Engine } from "quadstore-comunica";
-import { DataFactory } from "rdf-data-factory";
+import oxigraph from "oxigraph";
 import Product from "../model-layer/Product.js";
 
 export default class ProductService {
   constructor() {
-    this.store = new Quadstore({
-      backend: MemDown(),
-      dataFactory: new DataFactory(),
-    });
+    this.store = new oxigraph.Store();
 
-    this.baseURI = "http://www.rdf-petshop.com/product#";
+    this.baseURI = "http://www.rdf-petshop.com/product/";
     this.productIds = [];
     this.products = [];
-  }
-
-  open() {
-    return new Promise((resolve, reject) => {
-      this.store.open().then(() => {
-        this.engine = new Engine(this.store);
-        resolve();
-      });
-    });
   }
 
   addProduct(id, type, imageUrl, price, name, quantity, sale, sold) {
@@ -42,8 +27,8 @@ export default class ProductService {
       sold
     );
 
-    product.quads.forEach((q) => {
-      this.store.put(q);
+    product.triples.forEach((q) => {
+      this.store.add(q);
     });
 
     this.products.push(product);
@@ -63,7 +48,7 @@ export default class ProductService {
     if (typeof sale === "undefined") sale = product.sale;
     if (typeof sold === "undefined") sold = product.sold;
 
-    this.store.removeMatches(id);
+    this.removeProduct(id);
 
     product = new Product(
       id,
@@ -77,7 +62,7 @@ export default class ProductService {
     );
 
     product.quads.forEach((q) => {
-      this.store.put(q);
+      this.store.add(q);
     });
   }
 
@@ -85,7 +70,9 @@ export default class ProductService {
     if (!this.productIds.includes(id))
       throw "Product with id: " + id + " doesn't exists!";
 
-    this.store.removeMatches(id);
+    const product = this.products.find((product) => product._id === id);
+
+    this.store.delete(product);
 
     const index = this.productIds.indexOf(id);
 
@@ -94,29 +81,25 @@ export default class ProductService {
   }
 
   query(queryString) {
-    return this.engine
-      .query(queryString)
-      .then((query) => {
-        return query.execute();
-      })
-      .then((bindingsStream) => {
-        return bindingsStream.toArray();
-      })
-      .then((array) => {
-        const result = array
-          .map((v) => v.get("s"))
-          .filter((v, i, a) => a.indexOf(v) === i);
+    const subejcts = [];
 
-        return this.productsFromResult(result);
-      });
+    for (const binding of this.store.query(queryString)) {
+      subejcts.push(binding.get("s").value);
+    }
+
+    return this.productsFromResult(subejcts);
   }
 
   productsFromResult(result) {
     const products = [];
+    const addedId = [];
 
     result.forEach((v) => {
       this.products.forEach((p) => {
-        if (p._id === v) products.push(p.toPOJO());
+        if (p._id === v && !addedId.includes(v)) {
+          products.push(p.POJO);
+          products.push(v);
+        }
       });
     });
 
