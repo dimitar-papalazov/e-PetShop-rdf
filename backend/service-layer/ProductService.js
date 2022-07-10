@@ -8,11 +8,11 @@ export default class ProductService {
     this.baseURI = "http://www.rdf-petshop.com/product/";
     this.productIds = [];
     this.products = [];
+    this.idCounter = 0;
   }
 
-  addProduct(id, type, imageUrl, price, name, quantity, sale, sold) {
-    if (this.productIds.includes(id))
-      throw "Product with id: " + id + " already exists!";
+  addProduct(type, imageUrl, name, price, quantity, sale, sold) {
+    const id = this.idCounter++;
 
     this.productIds.push(id);
 
@@ -20,8 +20,8 @@ export default class ProductService {
       id,
       type,
       imageUrl,
-      price,
       name,
+      price,
       quantity,
       sale,
       sold
@@ -32,9 +32,11 @@ export default class ProductService {
     });
 
     this.products.push(product);
+
+    return product.POJO;
   }
 
-  editProduct(id, type, imageUrl, price, name, quantity, sale, sold) {
+  editProduct(id, type, imageUrl, name, price, quantity, sale, sold) {
     if (!this.productIds.includes(id))
       throw "Product with id: " + id + " doesn't exists!";
 
@@ -54,8 +56,8 @@ export default class ProductService {
       id,
       type,
       imageUrl,
-      price,
       name,
+      price,
       quantity,
       sale,
       sold
@@ -98,7 +100,7 @@ export default class ProductService {
       this.products.forEach((p) => {
         if (p._id === v && !addedId.includes(v)) {
           products.push(p.POJO);
-          products.push(v);
+          addedId.push(v);
         }
       });
     });

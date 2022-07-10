@@ -2,7 +2,6 @@ import oxigraph from "oxigraph";
 
 export default class Member {
   constructor(username, email, password, firstName, lastName, role) {
-    super();
     this.triples = [];
     this._id = `http://www.rdf-petshop.com/member/${username}`;
 
@@ -69,7 +68,7 @@ export default class Member {
     this.role = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/role"),
-      oxigraph.literal(role)
+      oxigraph.literal(`${role}`)
     );
 
     this.triples.push(this.role);

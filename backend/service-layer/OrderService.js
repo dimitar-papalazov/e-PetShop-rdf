@@ -8,10 +8,12 @@ export default class OrderService {
     this.baseURI = "http://www.rdf-petshop.com/order/";
     this.orderIds = [];
     this.orders = [];
+
+    this.idCounter = 0;
+    this.trackingNumberCounter = 0;
   }
 
   addOrder(
-    id,
     dateOrder,
     member,
     phoneNumber,
@@ -19,11 +21,10 @@ export default class OrderService {
     city,
     postalCode,
     toDoor,
-    trackingNumber,
     products
   ) {
-    if (this.orderIds.includes(id))
-      throw "Order with id: " + id + " already exists!";
+
+    const id = this.idCounter++;
 
     this.orderIds.push(id);
 
@@ -36,7 +37,7 @@ export default class OrderService {
       city,
       postalCode,
       toDoor,
-      trackingNumber,
+      this.trackingNumberCounter++,
       products
     );
 

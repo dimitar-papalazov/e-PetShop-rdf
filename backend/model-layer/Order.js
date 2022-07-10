@@ -13,7 +13,6 @@ export default class Order {
     trackingNumber,
     products
   ) {
-    super();
     this.triples = [];
     this._id = `http://www.rdf-petshop.com/order/${id}`;
 
@@ -58,7 +57,7 @@ export default class Order {
     this.dateOrder = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/date"),
-      oxigraph.literal(dateOrder)
+      oxigraph.literal(dateOrder.toString())
     );
 
     this.triples.push(this.dateOrder);
@@ -75,7 +74,7 @@ export default class Order {
   }
 
   createPhoneNumber(phoneNumber) {
-    this.firstNaphoneNumberme = oxigraph.triple(
+    this.phoneNumber = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/MobilePhone"),
       oxigraph.literal(phoneNumber)
@@ -108,7 +107,7 @@ export default class Order {
     this.postalCode = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/postalCode"),
-      oxigraph.literal(postalCode)
+      oxigraph.literal(`${postalCode}`)
     );
 
     this.triples.push(this.postalCode);
@@ -118,7 +117,7 @@ export default class Order {
     this.toDoor = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/type"),
-      oxigraph.literal(toDoor)
+      oxigraph.literal(`${toDoor}`)
     );
 
     this.triples.push(this.toDoor);
@@ -128,7 +127,7 @@ export default class Order {
     this.trackingNumber = oxigraph.triple(
       oxigraph.namedNode(this._id),
       oxigraph.namedNode("http://dbpedia.org/ontology/trackNumber"),
-      oxigraph.literal(trackingNumber)
+      oxigraph.literal(`${trackingNumber}`)
     );
 
     this.triples.push(this.trackingNumber);
@@ -140,7 +139,7 @@ export default class Order {
       const product = oxigraph.triple(
         oxigraph.namedNode(this._id),
         oxigraph.namedNode("http://dbpedia.org/ontology/product"),
-        oxigraph.literal(p)
+        oxigraph.literal(`${p}`)
       );
 
       this.products.push(product);

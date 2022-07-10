@@ -11,8 +11,9 @@ export default class MemberService {
   }
 
   addMember(username, email, password, firstName, lastName, role) {
-    if (this.usernames.includes(username))
+    if (this.usernames.includes(username)) {
       throw "Username " + username + " already exists!";
+    }
 
     this.usernames.push(username);
 
