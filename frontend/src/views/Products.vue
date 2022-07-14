@@ -8,7 +8,7 @@
         </div>
         <div class="col-lg-12 my-3">
           <router-link to="/add" v-show="user == null ? false: user.role ===
-          'ROLE_ADMIN'" class="btn btn-secondary">
+          0" class="btn btn-secondary">
             Додади нов производ
           </router-link>
         </div>
@@ -17,7 +17,7 @@
             class="col-lg-12 mx-auto my-5 bg-white rounded border border-dark text-center p-3"
           >
             <span v-show="user == null ? false: user.role ===
-          'ROLE_ADMIN'"
+          0"
               style="cursor: pointer"
               class="text-danger font-weight-bold"
               title="Delete"
@@ -37,16 +37,6 @@
                   class="btn btn-outline-primary rounded"
                   >Повеќе</a
                 >
-              </div>
-              <div class="col-lg-12 my-1 mx-auto">
-                <a
-                  :href="getEditLink(product.id)"
-                  v-show="user == null ? false: user.role ===
-          'ROLE_ADMIN'"
-                  class="btn btn-outline-primary rounded"
-                >
-                  Промени
-                </a>
               </div>
               <div v-show="product.quantity > 0" class="col-lg-12 my-1 mx-auto">
                 <button

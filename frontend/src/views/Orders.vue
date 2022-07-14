@@ -31,12 +31,7 @@
               <span class="text-primary">{{ o.dateOrder }}</span>
             </div>
             <div class="col-lg-12 my-3">
-              Email адреса:<span class="text-primary"> {{ o.member.email
-              }}</span>
-            </div>
-            <div class="col-lg-12 my-3">
-              Име и презиме: <span class="text-primary">{{ o.member.firstName
-              }} {{o.member.lastName}}</span>
+              Username:<span class="text-primary"> {{ o.member }}</span>
             </div>
             <div class="col-lg-12 my-3">
               Име на компанија (Опционално):
@@ -52,14 +47,13 @@
               >
             </div>
             <div v-show="user == null ? false: user.role ===
-          'ROLE_USER'" class="col-lg-12 my-3">
+          1" class="col-lg-12 my-3">
               Број за пратење:
               <span class="text-primary"
               >{{ o.trackingNumber }}</span
               >
             </div>
-            <div v-show="user == null ? false: user.role ===
-          'ROLE_ADMIN'" class="col-lg-12 my-3">
+            <div v-show="user == null ? false: user.role === 0" class="col-lg-12 my-3">
               Email порака со број за пратење:
               <div class="input-group" >
                 <input
@@ -85,7 +79,7 @@
               Производи:
               <div v-for="p in o.products" :key="p.index">
                 <span class="text-primary">
-                  {{ p.name }}, {{ getCyrilicName(p.type.name) }}</span
+                  {{ p }}</span
                 >
               </div>
             </div>
@@ -117,7 +111,7 @@ export default {
       OrderService.addTracking(order.id, order.trackingNumber)
     },
     loadOrders() {
-      if(this.user.role !== "ROLE_ADMIN") {
+      if(this.user.role !== 0) {
         OrderService.allOrders(this.user.username).then((response) => {
           this.orders = response.data;
         })

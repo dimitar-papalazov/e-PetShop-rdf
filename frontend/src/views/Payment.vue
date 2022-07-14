@@ -199,15 +199,14 @@ export default {
     },
     createOrder() {
       return OrderService.add({
-        username: this.user.username,
+        member: this.user.username,
         phoneNumber: this.phone,
         address: this.address,
         city: this.city,
         postalCode: this.postal,
         toDoor: this.doorOrderType,
         trackingNumber: null,
-        productIds: this.products.map(p => p.id),
-        company: this.company === undefined ? null : this.company
+        products: this.products.map(p => p.id),
       }).then(() => {
         alert("Успешно направена нарачка!");
         this.$store.commit("setCartToEmpty");

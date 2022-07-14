@@ -26,7 +26,9 @@ export default class MemberService {
       role
     );
 
-    member.triples.forEach((triple) => this.store.add(triple));
+    member.triples.forEach((triple) => {
+      this.store.add(triple)
+    });
 
     this.members.push(member);
 
@@ -72,20 +74,20 @@ export default class MemberService {
     for (const binding of this.store.query(queryString)) {
       subejcts.push(binding.get("s").value);
     }
-
+    
     return this.membersFromResult(subejcts);
   }
-
+  
   membersFromResult(result) {
     const members = [];
     const addedId = [];
-
+    
     result.forEach((v) => {
       this.members.forEach((m) => {
         if (m._id === v && !addedId.includes(v)) {
           members.push(m.POJO);
+          addedId.push(v);
         }
-        addedId.push(v);
       });
     });
 

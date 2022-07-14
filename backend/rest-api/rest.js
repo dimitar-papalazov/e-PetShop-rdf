@@ -40,7 +40,7 @@ app.post(baseUrl + "/members/registration", function (req, res) {
     memberConfig.role
   );
 
-  res.send({ member });
+  res.send({ ...member });
 });
 
 app.get(baseUrl + "/members/login", function (req, res) {
@@ -50,7 +50,6 @@ app.get(baseUrl + "/members/login", function (req, res) {
   const member = memberService.query(`
   SELECT ?s 
   WHERE { 
-    ?s <http://dbpedia.org/ontology/id> "${memberService.baseURI + username}" .
     ?s <http://dbpedia.org/ontology/password> "${password}" .
   }
   `);
@@ -61,7 +60,6 @@ app.get(baseUrl + "/members/login", function (req, res) {
 app.get(baseUrl + "/orders", function (req, res) {
   const username = req.query.username;
   let query = null;
-  console.log(memberService.baseURI + username)
 
   if (username === undefined) {
     query = `
@@ -172,7 +170,7 @@ app.get(baseUrl + "/products/similar", function (req, res) {
   res.send(products);
 });
 
-app.post(baseUrl + "/orders/add", function (req, res) {
+app.post(baseUrl + "/products/add", function (req, res) {
   const productConfig = req.body;
   const product = productService.addProduct(
     productConfig.type,
@@ -186,7 +184,7 @@ app.post(baseUrl + "/orders/add", function (req, res) {
   res.send({ product });
 });
 
-app.post(baseUrl + "/orders/edit", function (req, res) {
+app.post(baseUrl + "/products/edit", function (req, res) {
   const id = req.query.id;
   const product = productService.editProduct(
     id,
@@ -201,7 +199,7 @@ app.post(baseUrl + "/orders/edit", function (req, res) {
   res.send({ product });
 });
 
-app.post(baseUrl + "/orders/delete", function (req, res) {
+app.post(baseUrl + "/products/delete", function (req, res) {
   const id = req.query.id;
   productService.removeProduct(id);
   res.send({});
@@ -321,11 +319,11 @@ function initData() {
     0
   );
   const dp = memberService.addMember(
-    "dp",
+    "blabla",
     "d.papalazov@outlook.com",
-    "dp",
+    "blabla",
     "Dimitar",
-    " Papalazov",
+    "Papalazov",
     1
   );
   const as = memberService.addMember(
@@ -333,7 +331,7 @@ function initData() {
     "yourpapauniverse@gmail.com",
     "as",
     "Angela",
-    " Sotirovska",
+    "Sotirovska",
     1
   );
   const dpProducts = [];

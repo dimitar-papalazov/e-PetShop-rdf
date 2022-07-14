@@ -69,12 +69,13 @@ export default class ProductService {
   }
 
   removeProduct(id) {
+    id = parseInt(id)
     if (!this.productIds.includes(id))
       throw "Product with id: " + id + " doesn't exists!";
 
-    const product = this.products.find((product) => product._id === id);
+    const product = this.products.find((product) => product._id === this.baseURI + id);
 
-    this.store.delete(product);
+    product.triples.forEach(triple => this.store.delete(triple));
 
     const index = this.productIds.indexOf(id);
 

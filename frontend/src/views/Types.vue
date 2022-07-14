@@ -29,7 +29,7 @@
         </div>
         <div
           v-for="product in products"
-          v-show="product.type == selectedType.name"
+          v-show="product.type == selectedType.id"
           :key="product.id"
           class="col-lg-4"
         >
