@@ -310,6 +310,7 @@ function initData() {
     10,
     0
   );
+  console.log("Printing Products", productService.products);
   const admin = memberService.addMember(
     "admin",
     "epetshop.project@gmail.com",
@@ -334,6 +335,7 @@ function initData() {
     "Sotirovska",
     1
   );
+  console.log("Printing Members", memberService.members);
   const dpProducts = [];
   dpProducts.push(catScratcher.id);
   dpProducts.push(catFood.id);
@@ -361,4 +363,6 @@ function initData() {
     false,
     asProducts
   );
+  
+  console.log("Printing Orders", orderService.orders);
 }
