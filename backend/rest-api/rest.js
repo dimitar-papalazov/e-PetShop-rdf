@@ -50,6 +50,7 @@ app.get(baseUrl + "/members/login", function (req, res) {
   const member = memberService.query(`
   SELECT ?s 
   WHERE { 
+    ?s <http://dbpedia.org/ontology/id> "${memberService.baseURI + username}" .
     ?s <http://dbpedia.org/ontology/password> "${password}" .
   }
   `);
